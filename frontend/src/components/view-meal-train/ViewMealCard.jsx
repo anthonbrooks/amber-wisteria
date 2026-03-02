@@ -5,6 +5,7 @@ import MealCalendar from '../MealCalendar';
 import Button from '../Button';
 import SingleMealView from './SingleMealView';
 import axiosClient from '../../api/axiosClient';
+import IngredientOrRestrictionPill from './IngredientOrRestrictionPill';
 
 export default function ViewMealCard() {
   const [mealTrainData, setMealTrainData] = useState(null);
@@ -12,23 +13,25 @@ export default function ViewMealCard() {
   const [activeDate, setActiveDate] = useState(null);
   const [mealItems, setMealItems] = useState({});
   const [restrictions, setRestrictions] = useState([]);
-  const [location, setLocation] = useState('');
 
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const formatDate = (date) => {
     return date.toLocaleDateString('en-CA').split('T')[0];
   };
 
-  const { id } = useParams();
   useEffect(() => {
     const loadMealTrain = async () => {
       try {
         const res = await axiosClient.get(`/api/mealtrains/${id}/`);
+        const data = res.data;
 
-        setMealTrainData(res.data);
+        setMealTrainData(data);
 
-        const transformed = res.data.slots.reduce((acc, slot) => {
+        setRestrictions(data.dietary_restrictions?.split(',') || []);
+
+        const transformed = data.slots.reduce((acc, slot) => {
           const date = slot.slot_date;
 
           if (!acc[date]) {
@@ -45,29 +48,24 @@ export default function ViewMealCard() {
 
           return acc;
         }, {});
-
         setSelectedDates(transformed);
 
         const searchedMeals = {};
-        res.data.slots.forEach((slot) => {
-          const mealDetail = res.data.meals.find((m) => m.meal_slot === slot.id);
+        data.slots.forEach((slot) => {
+          const mealDetail = data.meals.find((m) => m.meal_slot === slot.id);
           if (mealDetail) {
             searchedMeals[`${slot.slot_date}-${slot.meal_type}`] = mealDetail;
           }
         });
         setMealItems(searchedMeals);
 
-        setRestrictions(res.data.dietary_restrictions.split(','));
-        setLocation(res.data.beneficiary_address);
-
         const dates = Object.keys(transformed);
         if (dates.length > 0) setActiveDate(dates[0]);
-
-        console.log(res.data);
       } catch (error) {
         console.log(`Error fetching meal train`, error);
       }
     };
+
     loadMealTrain();
   }, [id]);
 
@@ -78,21 +76,51 @@ export default function ViewMealCard() {
           <BackBtn onClick={() => navigate('/dashboard')} />
           <h1 className="text-3xl text-[#A88DE5] font-semibold">{mealTrainData?.title}</h1>
         </div>
-        <h2 className="font-semibold">Location: {location}</h2>
+
+        <div className="mb-4">
+          <h2 className="font-semibold text-lg">Beneficiary Details</h2>
+
+          <p>
+            <b>Name:</b> {mealTrainData?.beneficiary_name}
+          </p>
+
+          {mealTrainData?.beneficiary_phone && (
+            <p>
+              <b>Phone:</b> {mealTrainData.beneficiary_phone}
+            </p>
+          )}
+
+          {mealTrainData?.beneficiary_email && (
+            <p>
+              <b>Email:</b> {mealTrainData.beneficiary_email}
+            </p>
+          )}
+
+          <p>
+            <b>Address:</b> {mealTrainData?.beneficiary_address}
+          </p>
+        </div>
+
+        <div className="mb-4">
+          <h2 className="font-semibold text-lg">Dietary Restrictions</h2>
+          <div className="flex flex-wrap gap-2 mt-2 justify-center">
+            {restrictions.map((r) => (
+              <IngredientOrRestrictionPill key={r} className="bg-[#A88DE5]">
+                {r}
+              </IngredientOrRestrictionPill>
+            ))}
+          </div>
+        </div>
 
         <div className="grid lg:grid-cols-[auto_1fr] md:grid-cols-1 justify-center items-center p-4 gap-10 mb-2">
           <div className="flex flex-col gap-6">
-            <div className="w-full">
-              <MealCalendar
-                mode="view"
-                activeDate={activeDate}
-                selectedDates={selectedDates}
-                onDayClick={(date) => {
-                  setActiveDate(formatDate(date));
-                }}
-                formatDate={formatDate}
-              />
-            </div>
+            <MealCalendar
+              mode="view"
+              activeDate={activeDate}
+              selectedDates={selectedDates}
+              onDayClick={(date) => setActiveDate(formatDate(date))}
+              formatDate={formatDate}
+            />
 
             {activeDate && selectedDates[activeDate] && (
               <div className="mx-auto flex justify-between gap-6">
@@ -100,7 +128,7 @@ export default function ViewMealCard() {
                   <Button
                     key={meal}
                     children={meal}
-                    variant={`${selectedDates[activeDate]?.[meal] ? 'orange' : 'secondary'}`}
+                    variant={selectedDates[activeDate]?.[meal] ? 'orange' : 'secondary'}
                     className="rounded-full shadow-md duration-200 cursor-default"
                   />
                 ))}
@@ -123,10 +151,10 @@ export default function ViewMealCard() {
                         mealType={meal}
                         mealDate={activeDate}
                         mealTitle={details?.meal_description}
+                        mealDesc={details?.meal_description}
                         preparedBy={details?.prepared_by}
                         deliveryMethod={details?.special_notes}
-                        restrictions={restrictions || []}
-                        location={location}
+                        ingredients={details?.ingredients?.split(',') || []}
                       />
                     );
                   }

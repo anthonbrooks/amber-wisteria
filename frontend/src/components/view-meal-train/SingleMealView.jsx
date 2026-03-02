@@ -8,7 +8,6 @@ export default function SingleMealView({
   mealType = '',
   preparedBy = '',
   deliveryMethod = '',
-  restrictions = [],
   ingredients = []
 }) {
   const [isShowMoreClicked, setIsShowMoreClicked] = useState(false);
@@ -24,27 +23,26 @@ export default function SingleMealView({
 
       <div className="flex flex-wrap gap-3 mb-2">
         {ingredients.map((item) => (
-          <IngredientOrRestrictionPill key={item} className="bg-[#F68300]" children={item} />
+          <IngredientOrRestrictionPill key={item} className="bg-[#F68300]">
+            {item}
+          </IngredientOrRestrictionPill>
         ))}
       </div>
 
       {isShowMoreClicked && (
-        <div className="flex flex-col items-center justify-center gap-2">
-          <p className="text-gray-600 self-start">{mealDesc}</p>
-          <div className="flex flex-wrap gap-3 self-start items-center">
-            <p className="font-bold">Restrictions: </p>
-            {restrictions.map((item) => (
-              <IngredientOrRestrictionPill key={item} className="bg-[#A88DE5]" children={item} />
-            ))}
-          </div>
-          <p className="self-start">
-            <b>Delivery Method:</b> <span className=" text-gray-600">{deliveryMethod}</span>
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-gray-600">{mealDesc}</p>
+
+          <p>
+            <b>Delivery Method:</b> <span className="text-gray-600">{deliveryMethod}</span>
           </p>
-          <p className="self-start -mt-3">
-            <b>Prepared By: </b> <span className=" text-gray-600">{preparedBy}</span>
+
+          <p className="-mt-3">
+            <b>Prepared By:</b> <span className="text-gray-600">{preparedBy}</span>
           </p>
         </div>
       )}
+
       <div className="flex items-center justify-end">
         {isShowMoreClicked ? (
           <button
@@ -52,22 +50,8 @@ export default function SingleMealView({
             className="flex gap-1 text-[#F68300] items-center"
           >
             Show Less
-            <svg
-              width={15}
-              viewBox="0 0 1024 1024"
-              className="icon"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-            >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M903.232 768l56.768-50.432L512 256l-448 461.568 56.768 50.432L512 364.928z"
-                  fill="currentColor"
-                ></path>
-              </g>
+            <svg width={15} viewBox="0 0 1024 1024" fill="currentColor">
+              <path d="M903.232 768l56.768-50.432L512 256l-448 461.568 56.768 50.432L512 364.928z" />
             </svg>
           </button>
         ) : (
@@ -76,22 +60,8 @@ export default function SingleMealView({
             className="flex items-center gap-1 text-[#F68300]"
           >
             Show More
-            <svg
-              width={15}
-              viewBox="0 0 1024 1024"
-              className="icon"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-            >
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z"
-                  fill="currentColor"
-                ></path>
-              </g>
+            <svg width={15} viewBox="0 0 1024 1024" fill="currentColor">
+              <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" />
             </svg>
           </button>
         )}
