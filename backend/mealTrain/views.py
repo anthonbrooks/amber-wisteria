@@ -326,7 +326,10 @@ class MealTrainMembershipListCreateView(APIView):
         serializer = MealTrainMembershipSerializer(
             memberships, many=True, context={"request": request}
         )
-        return Response(serializer.data)
+        response = serializer.data
+        if not response:
+            response = {"title": train.title, "organizer": train.organizer.username}
+        return Response(response)
 
     @swagger_auto_schema(
         operation_description="Request to join a meal train (creates pending membership)",
