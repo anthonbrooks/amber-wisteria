@@ -14,6 +14,8 @@ export default function ViewMealTrain() {
 
   const [membershipStatus, setMembershipStatus] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [organizer, setOrganizer] = useState('');
+  const [title, setTitle] = useState('');
 
   const [error, setError] = useState(0);
 
@@ -21,6 +23,9 @@ export default function ViewMealTrain() {
     async function run() {
       try {
         const res = await axiosClient.get(`/api/mealtrains/${id}/memberships/`);
+        setOrganizer(res.data.organizer);
+        setTitle(res.data.title);
+
         if (res.data.length === 0) {
           setMembershipStatus('none');
         } else {
@@ -60,8 +65,8 @@ export default function ViewMealTrain() {
             onRequest={handleRequestApproval}
             onCancel={() => navigate('/dashboard')}
             requestSent={false}
-            inviterName="Organizer"
-            mealTrainName="Meal Train"
+            inviterName={organizer}
+            mealTrainName={title}
           />
         )}
 
@@ -70,8 +75,8 @@ export default function ViewMealTrain() {
             onRequest={handleRequestApproval}
             onCancel={() => navigate('/dashboard')}
             requestSent={true}
-            inviterName="Organizer"
-            mealTrainName="Meal Train"
+            inviterName={organizer}
+            mealTrainName={title}
           />
         )}
 
