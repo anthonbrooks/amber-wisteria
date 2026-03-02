@@ -35,7 +35,13 @@ export default function UserDashboard() {
         const user = userRes.data;
         const mealTrains = trainsRes.data;
 
-        const created = mealTrains.filter((t) => t.organizer_id === user.id);
+        const created = mealTrains
+          .filter((t) => t.organizer_id === user.id)
+          .map((t) => ({
+            ...t,
+            membership_status: 'owner'
+          }));
+
         const joined = mealTrains.filter((t) => t.organizer_id !== user.id);
 
         const joinedWithMemberships = await Promise.all(
@@ -104,7 +110,7 @@ export default function UserDashboard() {
   };
 
   const handleDelete = async () => {
-    if (confirmDeletePopupOpen.membershipStatus === 'owner') {
+    if (confirmDeletePopupOpen.membership_status === 'owner') {
       try {
         await axiosClient.delete(`/api/mealtrains/${confirmDeletePopupOpen.id}/`);
 
@@ -116,6 +122,7 @@ export default function UserDashboard() {
         }));
 
         setConfirmDeletePopupOpen(null);
+        return;
       } catch (err) {
         console.error(err);
       }
@@ -133,6 +140,7 @@ export default function UserDashboard() {
         }));
 
         setConfirmDeletePopupOpen(null);
+        return;
       } catch (err) {
         console.error(err);
       }
