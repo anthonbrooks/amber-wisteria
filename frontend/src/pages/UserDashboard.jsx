@@ -103,41 +103,45 @@ export default function UserDashboard() {
     }
   };
 
-  const handleDelete = async () => {
-    if (confirmDeletePopupOpen.membershipStatus === 'owner') {
-      try {
-        await axiosClient.delete(`/api/mealtrains/${confirmDeletePopupOpen.id}/`);
+const handleDelete = async () => {
+  if (confirmDeletePopupOpen.organizer_id === data.user.id) {
+    try {
+      await axiosClient.delete(`/api/mealtrains/${confirmDeletePopupOpen.id}/`);
 
-        setData((prev) => ({
-          ...prev,
-          createdMealTrains: prev.createdMealTrains.filter(
-            (t) => t.id !== confirmDeletePopupOpen.id
-          )
-        }));
+      setData(prev => ({
+        ...prev,
+        createdMealTrains: prev.createdMealTrains.filter(
+          t => t.id !== confirmDeletePopupOpen.id
+        )
+      }));
 
-        setConfirmDeletePopupOpen(null);
-      } catch (err) {
-        console.error(err);
-      }
+      setConfirmDeletePopupOpen(null);
+      return;
+    } catch (err) {
+      console.error(err);
     }
+  }
 
-    if (confirmDeletePopupOpen.membershipStatus === 'rejected') {
-      try {
-        await axiosClient.delete(`/api/memberships/${confirmDeletePopupOpen.membershipId}/`);
+  if (confirmDeletePopupOpen.membershipStatus === 'rejected') {
+    try {
+      await axiosClient.delete(
+        `/api/memberships/${confirmDeletePopupOpen.membershipId}/`
+      );
 
-        setData((prev) => ({
-          ...prev,
-          joinedMealTrains: prev.joinedMealTrains.filter(
-            (t) => t.membershipId !== confirmDeletePopupOpen.membershipId
-          )
-        }));
+      setData(prev => ({
+        ...prev,
+        joinedMealTrains: prev.joinedMealTrains.filter(
+          t => t.membershipId !== confirmDeletePopupOpen.membershipId
+        )
+      }));
 
-        setConfirmDeletePopupOpen(null);
-      } catch (err) {
-        console.error(err);
-      }
+      setConfirmDeletePopupOpen(null);
+      return;
+    } catch (err) {
+      console.error(err);
     }
-  };
+  }
+};
 
   if (loading) return <p className="p-10">Loading dashboard…</p>;
   if (error) return <p className="p-10">{error}</p>;
