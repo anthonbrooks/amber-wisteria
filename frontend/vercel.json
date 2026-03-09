@@ -7,7 +7,7 @@
       "dest": "https://backend-wispy-night-4986.fly.dev/api/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/((?!.*\\.).*)",
       "dest": "/index.html"
     }
   ]
