@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+fetch(`${API_URL}/api/users/`)
+  .then((res) => res.json())
+  .then((data) => console.log(data));
+
 const axiosClient = axios.create({
   baseURL: 'http://localhost:8000',
   withCredentials: true,
