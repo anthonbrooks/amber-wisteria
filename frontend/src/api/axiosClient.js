@@ -1,10 +1,14 @@
 import axios from 'axios';
+import { API_URL } from './api';
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: API_URL,
   withCredentials: true,
   xsrfCookieName: 'csrftoken',
-  xsrfHeaderName: 'X-CSRFToken'
+  xsrfHeaderName: 'X-CSRFToken',
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 axiosClient.interceptors.request.use((config) => {
