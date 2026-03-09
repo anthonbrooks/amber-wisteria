@@ -3,6 +3,10 @@
   "outputDirectory": "dist",
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "https://your-backend.fly.dev/api/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

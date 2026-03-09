@@ -15,27 +15,30 @@ import NotFound from './pages/NotFound.jsx';
 import EditMealTrain from './pages/EditMealTrain.jsx';
 
 function App() {
-  return (
-    <Routes>
-      <Route element={<GuestRoutes />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Route>
-
-      <Route path="/" element={<Home />} />
-
-      <Route element={<PrivateRoutes />}>
-        <Route path="/dashboard" element={<UserDashboard />} />
-        <Route path="/create-meal-train" element={<CreateMealTrain />} />
-        <Route path="/single-meal-view" element={<SingleMealView />} />
-        <Route path="/create-meal/:id" element={<CreateMeal />} />
-        <Route path="/view-meal-train/:id" element={<ViewMealTrain />} />
-        <Route path="/edit-meal-train/:id" element={<EditMealTrain />} />
-      </Route>
-
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
+  console.log('API URL:', import.meta.env.VITE_API_URL);
+  return <h1>Hello World!</h1>;
 }
+//   return (
+//     <Routes>
+//       <Route element={<GuestRoutes />}>
+//         <Route path="/login" element={<Login />} />
+//         <Route path="/signup" element={<Signup />} />
+//       </Route>
+
+//       <Route path="/" element={<Home />} />
+
+//       <Route element={<PrivateRoutes />}>
+//         <Route path="/dashboard" element={<UserDashboard />} />
+//         <Route path="/create-meal-train" element={<CreateMealTrain />} />
+//         <Route path="/single-meal-view" element={<SingleMealView />} />
+//         <Route path="/create-meal/:id" element={<CreateMeal />} />
+//         <Route path="/view-meal-train/:id" element={<ViewMealTrain />} />
+//         <Route path="/edit-meal-train/:id" element={<EditMealTrain />} />
+//       </Route>
+
+//       <Route path="*" element={<NotFound />} />
+//     </Routes>
+//   );
+// }
 
 export default App;
