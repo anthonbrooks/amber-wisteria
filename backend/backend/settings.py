@@ -63,8 +63,12 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "https://amber-wisteria.vercel.app",
+    "http://localhost:4173", # Vite dev server
+    "https://amber-wisteria.vercel.app", # Vercel frontend
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    "^https://.*\.vercel\.app$",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
