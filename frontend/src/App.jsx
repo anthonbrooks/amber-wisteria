@@ -15,7 +15,6 @@ import NotFound from './pages/NotFound.jsx';
 import EditMealTrain from './pages/EditMealTrain.jsx';
 
 function App() {
-  console.log('API URL:', import.meta.env.VITE_API_URL);
   return <h1>Hello World!</h1>;
 }
 //   return (
