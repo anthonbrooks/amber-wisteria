@@ -28,7 +28,7 @@ export default function Signup() {
 
     if (password === confirmPassword) {
       try {
-        const res = await axiosClient.post('/auth/register', {
+        const res = await axiosClient.post('/api/auth/register', {
           username: username,
           password: password,
           email: email
